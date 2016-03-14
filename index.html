@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Robot Arm</title>
+    <script src="js/webble.js"></script>
+
+    <!-- see: https://github.com/tomgco/gyro.js -->
+    <script src="lib/gyro.js"></script>
+
+
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+
+</head>
+
+<body>
+
+
+
+    <div data-role="page">
+        <div data-role="header">
+            <h1>MeArm Controller</h1>
+        </div>
+
+        <div data-role="main"><button id="connectButton">Connect</button></div>
+
+        Set Servo Angles
+        <div data-role="main" class="ui-content">
+            <form>
+                <label for="base">Base:</label>
+                <input type="range" name="points" id="base" value="90" min="0" max="180" data-show-value="true">
+                <label for="base">Left:</label>
+                <input type="range" name="points" id="left" value="90" min="0" max="180" data-show-value="true">
+                <label for="base">Right:</label>
+                <input type="range" name="points" id="right" value="90" min="0" max="180" data-show-value="true">
+                <label for="base">Claw:</label>
+                <input type="range" name="points" id="claw" value="90" min="0" max="180" data-show-value="true">
+            </form>
+            <br/>
+            Set Position (Inverse Kinematics):
+            <form>
+                <label for="xPos">X:</label>
+                <input type="range" name="points" id="xPos" value="0" min="-100" max="100" data-show-value="true">
+                <label for="yPos">Y:</label>
+                <input type="range" name="points" id="yPos" value="0" min="-100" max="100" data-show-value="true">
+                <label for="zPos">Z:</label>
+                <input type="range" name="points" id="zPos" value="0" min="-100" max="100" data-show-value="true">
+            </form>
+        </div>
+    </div>
+
+    <!-- ======================================================================================== -->
+    <script>bleSetup();</script>
+
+    <script>
+        gyro.calibrate();
+        gyro.frequency = 150;
+        gyro.startTracking(function(o) {
+        //console.log(JSON.stringify(o));
+        msg = (new Date().getTime()/1000).toFixed(2) + ":"
+                + "  X:" + o.x.toFixed(2)
+                + "  Y:" + o.y.toFixed(2)
+                + "  Z:" + o.z.toFixed(2)
+                + "  A:" + o.alpha.toFixed(2)
+                + "  B:" + o.beta.toFixed(2)
+                + "  G:" + o.gamma.toFixed(2)
+        ;
+        console.log(msg);
+            sendRobotArmMessage_SetPosition(0,  o.beta, 50);
+    });</script>
+
+
+    <script>
+
+        function sendRobotArmMessage_SetServoAngles(x, y, z,g) {
+            var buf = [0x00, 0x02, x,y,z, g];
+            sendMessage(create_message_from_int8array(buf));
+        }
+
+        function sendRobotArmMessage_SetPosition(x, y, z) {
+            var buf = [0x0300, x,y,z];
+            sendMessage(create_message_from_int16array(buf));
+        }
+
+    </script>
+
+    <script>
+        /*
+        setInterval(function() {
+            if (connected) {
+                if (0) {
+                    // Set SetnServo Angles message
+                    var base  = $('#base').val();
+                    var left  = $('#left').val();
+                    var right = $('#right').val();
+                    var claw  = $('#claw').val();
+
+                    console.log("BASE=" + base);
+                    sendRobotArmMessage_SetServoAngles(base, left, right, claw);
+
+                } else {
+                    // Set Position message
+                    var x  = $('#xPos').val();
+                    var y  = $('#yPos').val();
+                    var z  = $('#zPos').val();
+
+                    sendRobotArmMessage_SetPosition(x,y,z);
+
+                }
+            }
+        }, 200);
+        */
+    </script>
+</body>
+</html>
