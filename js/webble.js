@@ -115,7 +115,7 @@ else
                 .then(device => {
                 console.log('> DEviceNAme=' + device.name);
             console.log('Connecting to GATT Server...');
-            return device.connectGATT();
+            return device.gatt.connect();
         })
         .
             then(server => {
