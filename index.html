@@ -41,6 +41,7 @@
                 <label for="base">Claw:</label>
                 <input type="range" name="points" id="claw" value="90" min="0" max="180" data-show-value="true">
             </form>
+            <!--
             <br/>
             Set Position (Inverse Kinematics):
             <form>
@@ -51,6 +52,7 @@
                 <label for="zPos">Z:</label>
                 <input type="range" name="points" id="zPos" value="0" min="-100" max="100" data-show-value="true">
             </form>
+            -->
         </div>
     </div>
 
@@ -94,7 +96,7 @@
         setInterval(function() {
             if (connected) {
                 if (true) {
-                    // Set SetnServo Angles message
+                    // Send SetServo Angles message
                     var base  = $('#base').val();
                     var left  = $('#left').val();
                     var right = $('#right').val();
@@ -104,7 +106,7 @@
                     sendRobotArmMessage_SetServoAngles(base, left, right, claw);
 
                 } else {
-                    // Set Position message
+                    // Send SetPosition message
                     var x  = $('#xPos').val();
                     var y  = $('#yPos').val();
                     var z  = $('#zPos').val();

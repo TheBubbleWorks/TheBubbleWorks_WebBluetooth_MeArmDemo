@@ -98,11 +98,11 @@ function disconnect() {
 
 function bleSetup() {
     document.getElementById("connectButton").addEventListener('click', () => {
-        if (gattServer != null && gattServer.connected)
+    if (gattServer != null && gattServer.connected)
     {
         disconnect();
     }
-else
+    else
     {
         console.log('Connecting...');
         //progress.hidden = false;
